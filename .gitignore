@@ -1,0 +1,12 @@
+# Eclipse
+bin/
+.settings/
+
+# Java
+*.class
+
+# Logs
+*.log
+
+# Input files
+input/
