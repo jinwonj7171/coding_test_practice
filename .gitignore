@@ -1,6 +1,7 @@
 # Eclipse
 bin/
 .settings/
+.metadata/
 
 # Java
 *.class
@@ -10,3 +11,6 @@ bin/
 
 # Input files
 input/
+
+# macOS
+.DS_Store
