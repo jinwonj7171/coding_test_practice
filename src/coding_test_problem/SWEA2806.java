@@ -4,58 +4,89 @@ import java.io.*;
 import java.util.*;
 
 public class SWEA2806 {
-	static int[][] arr;
-	static int [] dr = {-1,-1,-1};
-	static int [] dc = {-1,0,1};
+	static int result;
+
 	static int N;
-	static int count;
-    static boolean check(int r, int c) {
-    	for (int dir = 0; dir < 3; dir++) {
-        	int nr = r + dr[dir];
-        	int nc = c + dc[dir];
-        	while(nr>=0&&nr<N&&nc>=0&&nc<N) {
-        		if(arr[nr][nc] ==1) {
-        			return false;
-        		}
-        		nr +=dr[dir];
-        		nc += dc[dir];
-        	}
-        	
+	static int[] dc = { -1, 1, 0, 0, -1, 1, -1, 1 };
+	static int[] dr = { 0, 0, -1, 1, 1, -1, -1, 1 };
+
+	static void setline(int x, int y, int[][] arr) {
+		for (int i = 0; i < 8; i++) {
+
+			int nx = x;
+			int ny = y;
+
+			nx += dc[i];
+			ny += dr[i];
+			while (nx >= 0 && ny >= 0 && nx < N && ny < N) {
+
+				arr[nx][ny] = 1;
+
+				nx += dc[i];
+				ny += dr[i];
+
+			}
+
 		}
 
-    	return true;
-    }
-    static void dfs (int r) {
-    	if(r == N) {
-    		count ++;
-    		return;
-    	}
-    	for (int i = 0; i < N; i++) {
-			if (check(r,i)) {
-				arr[r][i] =1;
-				dfs(r+1);
-				arr[r][i] = 0;
+	}
+
+	static boolean check(int x, int y, int[][] arr) {
+		for (int i = 0; i < 6; i++) {
+
+			int nx = x;
+			int ny = y;
+			nx += dc[i];
+			ny += dr[i];
+			while (nx >= 0 && ny >= 0 && nx < N && ny < N) {
+				if (arr[nx][ny] != 0) {
+					return false;
+				}
+				nx += dc[i];
+				ny += dr[i];
+
+			}
+
+		}
+		return true;
+	}
+
+	static void dfs(int[][] arr, int idx) {
+		if (idx == N) {
+			result += 1;
+			return;
+		}
+
+		for (int j = 0; j < N; j++) {
+			if (arr[idx][j] == 0) {
+				int[][] arr2 = new int[N][N];
+				for (int r = 0; r < N; r++) {
+					arr2[r] = arr[r].clone();
+				}
+				arr2[idx][j] = 2;
+				setline(idx, j, arr2);
+				dfs(arr2, idx + 1);
 			}
 		}
-    }
-	public static void main(String[] args) throws Exception{
+
+		return;
+	}
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new FileReader("input/swea_2806.txt"));
 		int n = Integer.parseInt(br.readLine());
+		StringBuilder sb = new StringBuilder();
 		for (int tc = 1; tc <= n; tc++) {
-			count=0;
 			N = Integer.parseInt(br.readLine());
-			arr = new int[N][N];
+			int[][] arr = new int[N][N];
+			result = 0;
+			dfs(arr, 0);
 
-			dfs(0);
-			System.out.println("#" + tc + " " + count);
-				
-			}
-			
+			sb.append("#").append(tc).append(" ").append(result).append("\n");
+
 		}
+		System.out.println(sb);
 
-	
-		
-
-	
+	}
 
 }
